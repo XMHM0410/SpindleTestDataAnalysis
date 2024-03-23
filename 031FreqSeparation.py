@@ -1,18 +1,21 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from utils import plotThree,plotOne,plotPolar,plotFreq
 # %%读文件三点法混合信号
-dfi1 = pd.read_csv('Data\MixedSignal.csv')
+# 文件保存地址
+addr = 'Data\\Fanuc2000-120\\'
+dfi1 = pd.read_csv(addr+'03MixedSignal.csv')
 S = dfi1["S"].values
 t = dfi1["t"].values
 theta = dfi1["theta"].values
 N = len(S)
 # %%读文件基本参数
-dfi2 = pd.read_csv('Data\config.csv')
+dfi2 = pd.read_csv(addr+'00config.csv')
 fs = dfi2["fs"].values[0]
 rpm = dfi2["rpm"].values[0]
 # %%读文件FFT数据
-dfi3 = pd.read_csv('Data\FFTData.csv')
+dfi3 = pd.read_csv(addr+'04FFTData.csv')
 freq = dfi3["freq"].values
 amp = dfi3["amp"].values
 fft_data = dfi3["fft_data"].values
@@ -24,7 +27,10 @@ freq_i = freq[interest_freq_mask]
 amp_i = amp[interest_freq_mask]
 # %%按转速基频倍频分离同步误差和异步误
 bf = rpm/60 # 基频 Hz
-bf_index = np.where(freq == np.float64(bf))[0][0] #转换成索引
+bf = np.round(bf, 1)#保留1位小数
+freq_check = np.round(freq, 1)
+print(np.float64(bf))
+bf_index = np.where(freq_check == bf)[0][0] #转换成索引
 Sync_fft = fft_data.copy()
 Async_fft = fft_data.copy()
 Sync_fft[0] = 0 # 把频率为0的第一项去掉，相当于滤掉部分随机误差
@@ -53,21 +59,13 @@ Rod_amp = (np.abs(Rod_fft))*(2/N)
 Pos_amp = (np.abs(Pos_fft))*(2/N)
 # %%误差绘图
 # 同步误差
-plt.figure(3)
-plt.plot(theta[0:2000],Sync_sig[0:2000])
-plt.title('Sync')
+plotOne.plotOne(theta, Sync_sig, ti='Sync')
 # 同步误差频谱
-plt.figure(4)
-plt.stem(freq_i, Sync_amp[interest_freq_mask])
-plt.title('Sync_freq')
+plotFreq.plotFreq(freq_i, Sync_amp[interest_freq_mask],ti='Sync_freq')
 # 异步误差
-plt.figure(5)
-plt.plot(theta[0:2000],Async_sig[0:2000])
-plt.title('Async')
+plotOne.plotOne(theta, Async_sig, ti='Async')
 # 异步误差频谱
-plt.figure(6)
-plt.stem(freq_i, Async_amp[interest_freq_mask])
-plt.title('Async_freq')
+plotFreq.plotFreq(freq_i, Async_amp[interest_freq_mask],ti='Async_freq')
 plt.show()
 # %%保存文件
 # %%输出到文件
@@ -76,11 +74,11 @@ df1 = pd.DataFrame({'t':t,'theta':theta,
                     'Async': np.real(Async_sig), 
                     'Rod': np.real(Rod_sig), 
                     'Pos': np.real(Pos_sig)})
-df1.to_csv('Data\SyncAndAsyncData.csv', index=False)
+df1.to_csv(addr+'05SyncAndAsyncData.csv', index=False)
 df2 = pd.DataFrame({'freq_i':freq_i,
                     'amp_i':amp_i,
                     'sync_amp':Sync_amp[interest_freq_mask],
                     'async_amp':Async_amp[interest_freq_mask],
                     'rod_amp':Rod_amp[interest_freq_mask],
                     'pos_amp':Pos_amp[interest_freq_mask]})
-df2.to_csv('Data\SyncAndAsyncAmpData.csv', index=False)
+df2.to_csv(addr+'06SyncAndAsyncAmpData.csv', index=False)

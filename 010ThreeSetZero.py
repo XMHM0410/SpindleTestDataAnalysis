@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 # %% 测量原始数据
-data = pd.read_csv('Data\OriginalData.csv', header=None, delimiter='\t')
+# 文件保存地址
+addr = 'Data\\Fanuc12000-120\\'
+data = pd.read_csv(addr+'01OriginalData.csv', header=None) # , delimiter='\t'
 s1 = data.iloc[:, 0].values
 s2 = data.iloc[:, 1].values
 s3 = data.iloc[:, 2].values
@@ -21,6 +23,6 @@ s2 = set_zero(s2)
 s3 = set_zero(s3)
 # %%输出文件
 dfo1 = pd.DataFrame({"s1":s1,"s2":s2,"s3":s3})
-dfo1.to_csv('Data\OriginalSignal.csv', index=False)
-dfo2 = pd.DataFrame({"rpm":[rpm],"fs":[fs],"alpha":[alpha],"beta":[beta]})
-dfo2.to_csv('Data\config.csv')
+dfo1.to_csv(addr+'02OriginalSignal.csv', index=False)
+dfo2 = pd.DataFrame({"rpm":[rpm],"fs":[fs],"alpha":[alpha],"beta":[beta],"loops":[20]})
+dfo2.to_csv(addr+'00config.csv')

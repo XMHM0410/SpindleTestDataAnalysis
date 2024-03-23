@@ -2,15 +2,17 @@ import pandas as pd
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from utils import plotThree,plotOne
+from utils import plotThree,plotOne,plotPolar,plotFreq
 # %% 测量原始数据
-df = pd.read_csv('Data\OriginalSignal.csv')
+# 文件保存地址
+addr = 'Data\\Fanuc2000-120\\'
+df = pd.read_csv(addr+'02OriginalSignal.csv')
 s1 = df["s1"].values
 s2 = df["s2"].values
 s3 = df["s3"].values
 # %% 读取基本参数
 # %%读文件基本参数
-dfi2 = pd.read_csv('Data\config.csv')
+dfi2 = pd.read_csv(addr+'00config.csv')
 fs = dfi2["fs"].values[0]
 rpm = dfi2["rpm"].values[0]
 alpha = dfi2["alpha"].values[0]
@@ -28,8 +30,10 @@ t = np.arange(0,t_total,t_total/N) #生成时间轴
 theta = np.arange(0,deg,deg/N) #生成角度轴 取10圈的数据
 # %%三点法计算
 S = s1*c1+s2*c2+s3*c3 # 三点法表达式
+plotThree.plotThree(theta,s1,s2,s3)
 plotOne.plotOne(theta,S)
+plotPolar.plotPolar(theta,S)
 plt.show()
 # %%文件保存
 df1 = pd.DataFrame({"t":t,"theta":theta,"S":S,'s1':s1,'s2':s2,'s3':s3})
-df1.to_csv('Data\MixedSignal.csv')
+df1.to_csv(addr+'03MixedSignal.csv')
