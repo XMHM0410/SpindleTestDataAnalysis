@@ -2,7 +2,9 @@ from pyemd import CEEMDAN
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+# from numba import autojit
 
+# @autojit
 def ceemdan_decompose(data):
     IImfs=[]
     ceemdan = CEEMDAN()

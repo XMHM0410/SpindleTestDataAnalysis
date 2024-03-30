@@ -2,11 +2,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from utils import plotThree,plotOne,plotPolar,plotFreq
-# %%读文件三点法混合信号
-# 文件保存地址
-addr = 'Data\\Fanuc6000-90\\'
-df = pd.read_csv(addr+'03MixedSignal.csv')
-S = df["S"].values
+# %% 读文件
+addr = addr = 'Data\\Fanuc6000-90\\'
+df = pd.read_csv(addr+'09RebuildSignal.csv')
+S = df["Rebuild_S"].values
 t = df["t"].values
 theta = df["theta"].values
 # %%读文件基本参数
@@ -26,4 +25,4 @@ plotFreq.plotFreq(freq_i,amp_i)
 plt.show()
 # %%导出文件
 df_out1 = pd.DataFrame({'freq':freq,'amp':amp,"fft_data":fft_data})
-df_out1.to_csv(addr+'04FFTData.csv', index=False)
+df_out1.to_csv(addr+'10FFT2Data.csv', index=False)

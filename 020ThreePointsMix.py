@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from utils import plotThree,plotOne,plotPolar,plotFreq
 # %% 测量原始数据
 # 文件保存地址
-addr = 'Data\\Fanuc2000-120\\'
+addr = 'Data\\Fanuc6000-90\\'
 df = pd.read_csv(addr+'02OriginalSignal.csv')
 s1 = df["s1"].values
 s2 = df["s2"].values

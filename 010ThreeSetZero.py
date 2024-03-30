@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 # %% 测量原始数据
 # 文件保存地址
-addr = 'Data\\Fanuc12000-120\\'
+addr = 'Data\\Fanuc6000-90\\'
 data = pd.read_csv(addr+'01OriginalData.csv', header=None) # , delimiter='\t'
 s1 = data.iloc[:, 0].values
 s2 = data.iloc[:, 1].values

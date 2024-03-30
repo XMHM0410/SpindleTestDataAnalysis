@@ -5,8 +5,8 @@ from utils import plotThree,plotOne,plotPolar,plotFreq
 # %%读文件三点法混合信号
 # 文件保存地址
 addr = 'Data\\Fanuc6000-90\\'
-dfi1 = pd.read_csv(addr+'03MixedSignal.csv')
-S = dfi1["S"].values
+dfi1 = pd.read_csv(addr+'09RebuildSignal.csv')
+S = dfi1["Rebuild_S"].values
 t = dfi1["t"].values
 theta = dfi1["theta"].values
 N = len(S)
@@ -15,7 +15,7 @@ dfi2 = pd.read_csv(addr+'00config.csv')
 fs = dfi2["fs"].values[0]
 rpm = dfi2["rpm"].values[0]
 # %%读文件FFT数据
-dfi3 = pd.read_csv(addr+'04FFTData.csv')
+dfi3 = pd.read_csv(addr+'10FFT2Data.csv')
 freq = dfi3["freq"].values
 amp = dfi3["amp"].values
 fft_data = dfi3["fft_data"].values
@@ -27,8 +27,8 @@ freq_i = freq[interest_freq_mask]
 amp_i = amp[interest_freq_mask]
 # %%按转速基频倍频分离同步误差和异步误
 bf = rpm/60 # 基频 Hz
-bf = np.round(bf, 1)#保留1位小数
-freq_check = np.round(freq, 1)
+bf = np.round(bf, decimals=-1) # 保留1位小数,不四舍五入
+freq_check = np.round(freq, decimals=-1) # 保留1位小数,不四舍五入
 print(np.float64(bf))
 bf_index = np.where(freq_check == bf)[0][0] #转换成索引
 Sync_fft = fft_data.copy()
@@ -74,11 +74,11 @@ df1 = pd.DataFrame({'t':t,'theta':theta,
                     'Async': np.real(Async_sig), 
                     'Rod': np.real(Rod_sig), 
                     'Pos': np.real(Pos_sig)})
-df1.to_csv(addr+'05SyncAndAsyncData.csv', index=False)
+df1.to_csv(addr+'11SyncAndAsync2Data.csv', index=False)
 df2 = pd.DataFrame({'freq_i':freq_i,
                     'amp_i':amp_i,
                     'sync_amp':Sync_amp[interest_freq_mask],
                     'async_amp':Async_amp[interest_freq_mask],
                     'rod_amp':Rod_amp[interest_freq_mask],
                     'pos_amp':Pos_amp[interest_freq_mask]})
-df2.to_csv(addr+'06SyncAndAsyncAmpData.csv', index=False)
+df2.to_csv(addr+'12SyncAndAsyncAmp2Data.csv', index=False)
