@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 # %% 读文件
-addr = addr = 'Data\\Fanuc1000-90\\'
+addr = addr = 'Data\\Fanuc6000-900\\'
 df = pd.read_csv(addr+'03MixedSignal.csv')
 S = df["S"].values
 t = df["t"].values
@@ -27,5 +27,11 @@ Rebuild_S = []
 for i in range(len(loops)):
     Rebuild_S.append(loops[f"loop{i+1}_rebuild"])
 Rebuild_S = np.concatenate(Rebuild_S, axis=0)
-out2 = pd.DataFrame({"t":t[0:len(Rebuild_S)],"theta":theta[0:len(Rebuild_S)],"Rebuild_S":Rebuild_S})
-out2.to_csv(addr+f'09RebuildSignal.csv', index=False)
+print(len(Rebuild_S))
+print(len(theta))
+if len(Rebuild_S) <= len(theta):
+    out2 = pd.DataFrame({"t":t[0:len(Rebuild_S)],"theta":theta[0:len(Rebuild_S)],"Rebuild_S":Rebuild_S})
+    out2.to_csv(addr+f'09RebuildSignal.csv', index=False)
+else:
+    out2 = pd.DataFrame({"t":t,"theta":theta,"Rebuild_S":Rebuild_S[0:len(theta)]})
+    out2.to_csv(addr+f'09RebuildSignal.csv', index=False)

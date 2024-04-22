@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from utils import plotThree,plotOne,plotPolar,plotFreq
 # %%读文件三点法混合信号
 # 文件保存地址
-addr = 'Data\\Fanuc6000-90\\'
+addr = 'Data\\Fanuc6000-120\\'
 dfi1 = pd.read_csv(addr+'09RebuildSignal.csv')
 S = dfi1["Rebuild_S"].values
 t = dfi1["t"].values
@@ -27,14 +27,15 @@ freq_i = freq[interest_freq_mask]
 amp_i = amp[interest_freq_mask]
 # %%按转速基频倍频分离同步误差和异步误
 bf = rpm/60 # 基频 Hz
-bf = np.round(bf, decimals=-1) # 保留1位小数,不四舍五入
-freq_check = np.round(freq, decimals=-1) # 保留1位小数,不四舍五入
-print(np.float64(bf))
+bf = np.round(bf, decimals=1) # 保留1位小数,不四舍五入
+print(bf)
+freq_check = np.round(freq, decimals=1) # 保留1位小数,不四舍五入
 bf_index = np.where(freq_check == bf)[0][0] #转换成索引
+print(bf_index)
 Sync_fft = fft_data.copy()
 Async_fft = fft_data.copy()
-Sync_fft[0] = 0 # 把频率为0的第一项去掉，相当于滤掉部分随机误差
-Async_fft[0] = 0
+Sync_fft[0] = 0.0 # 把频率为0的第一项去掉，相当于滤掉部分随机误差
+Async_fft[0] = 0.0
 for i in range(1,len(freq_i)):
     if (i) % bf_index == 0:
         Async_fft[i] = 0

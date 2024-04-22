@@ -71,4 +71,6 @@ string_to_export += "pos2_fit"+ str(pos2_fit) +"\n"
 print(string_to_export)
 with open(addr+"13FittingCircle.txt", "w", encoding="utf-8") as file: # 使用 open 函数打开（或创建）一个文件，并选择写入模式 'w'
     file.write(string_to_export)# 将字符串写入到文件中
+out2 = pd.DataFrame({'theta':theta1,'sync1':sync1,'async1':async1,'rod1':rod1,'pos1':pos1,'sync2':sync2,'async2':async2,'rod2':rod2,'pos2':pos2})
+out2.to_csv(addr+"14ResultCircle.csv",index=False)
 # 图用60x40
